@@ -1,0 +1,10 @@
+node_modules
+/dist
+*.log
+yeet_manifest.md
+changelog.html
+config/descriptions.js
+config/exportLineItems.js
+config/exportWorkOrderNotes.js
+config/formConfig.js
+/plugins/*/*

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sterilizer Configurator Checklist</title>
+  <link rel="icon" type="image/png" href="./img/favicon.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+  <div id="toastContainer" class="toast-container top-0 end-0"></div>
+  <button id="themeToggle" class="btn">
+    <i class="material-symbols-outlined light_mode">light_mode</i>
+  </button>
+  <a id="helpPage" class="btn" href="./help.html" onclick="openHelpWindow(event)">
+    <i class="material-symbols-outlined help">help</i>
+  </a>
+  <div id="app" class="container-fluid row">
+    <!-- Sidebar Starts -->
+    <nav id="sidebarMenu" class="row d-lg-block sidebar shadow position-sticky sidebar-sticky">
+      <div class="navbar-brand"></div>
+      <div class="container-fluid">
+        <div class="row titlearea justify-content-center align-items-center col-lg-12 col-12 offset-0" href="#">
+          <img src="./img/logo.png" alt="Logo" width="350" class="logo d-inline-block align-text-top col-lg-12 col-6">
+          <div id="app-title" class="title text-center pt-lg-5 col-lg-12 pt-0 col-5 align-self-end">BETA STAR STERILIZER CONFIGURATOR CHECKLIST
+            <pre id="version" class="subtitle text-secondary text-right col-lg-12 mb-0">v</pre>
+          </div>
+        </div>
+      </div>
+      <div class="d-lg-block collapse" id="mainNavbar">
+        <div class="list-group list-group-flush mx-3 mt-4 pb-lg-0 pb-4" id="sidebar-buttons">
+          <ul class="navbar-nav list-group list-group-flush">
+            <li class="nav-item p-1">
+              <input type="file" id="importFile" class="form-control-file g-2" style="display: none;">
+              <button id="importButton" class="btn btn-outline-dark g-2">Import Checklist</button>
+            </li>
+            <li class="nav-item p-1">
+              <button id="saveButton" class="btn btn-outline-success g-2">Save Checklist</button>
+            </li>
+            <li class="nav-item p-1">
+              <button id="sendEmail" class="btn btn-outline-info g-2">Send Email</button>
+            </li>
+            <!-- Plugin buttons are injected here dynamically by pluginLoader.js -->
+            <li class="nav-item p-1">
+              <button id="exportButton" class="btn btn-outline-dark g-2">Export to PDF</button>
+            </li>
+            <li class="nav-item p-1">
+              <button id="changelogbtn" class="btn btn-outline-dark g-2">
+                View Changelog</button>
+            </li>
+          </ul>
+        </div>
+        <div class="list-group list-group-flush mx-3 m-4" id="sidebar-content">
+          <div class="title h5 text-left text-left col-12 border-top pt-4">Form Sections</div>
+        </div>
+      </div>
+      <button class="d-lg-none navbar-toggler btn btn-outline-dark col-2 offset-10 mt-4" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="material-symbols-outlined Menu">Menu</i>
+      </button>
+    </nav>
+    <!-- Sidebar Ends -->
+
+    <div id="formContainer" class="row col-lg-9 offset-lg-3">
+    </div>
+  </div>
+  <script src="./version.js"></script>
+  <script src="./config/formConfig.js"></script>
+  <script src="./js/time.js"></script>
+  <script src="./js/refreshValues.js"></script>
+  <script src="./js/dragDrop.js"></script>
+  <script src="./js/buildNotification.js"></script>
+  <script src="./js/saveLoad.js"></script>
+  <script src="./js/createSidebar.js"></script>
+  <script src="./js/buildform.js"></script>
+  <script src="js/conditions.js"></script>
+  <script src="./js/buttons.js"></script>
+  <script src="./js/themeToggle.js"></script>
+  <script src="./js/eventListeners.js"></script>
+  <script src="./js/pdfGenerator.js"></script>
+  <script src="./js/validation.js"></script>
+  <script src="./js/email.js"></script>
+  <script src="./js/checkVersion.js"></script>
+
+  <!-- Plugin System -->
+  <script src="./plugins/pluginLoader.js"></script>
+  <script src="./plugins/descriptions/descriptions.js"></script>
+  <script src="./plugins/exportLineItems/exportLineItems.js"></script>
+  <script src="./plugins/exportWorkOrderNotes/exportWorkOrderNotes.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+  <script>
+    async function openHelpWindow(event) {
+        event.preventDefault();
+        const width = 1024;
+        const height = 768;
+        const currentWindow = window;
+        const currentRight = currentWindow.screenX + currentWindow.outerWidth;
+        let left = currentRight;
+        if (left + width > window.screen.availWidth) { left = currentRight - width; }
+        const top = currentWindow.screenY;
+        const primaryUrl = './help.html';
+        const fallbackUrl = './beta-star-sterilizer-configurator/help.html';
+        try {
+            const response = await fetch(primaryUrl, { method: 'HEAD' });
+            if (response.ok) {
+                window.open(primaryUrl, 'helpWindow', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+            } else { throw new Error('Primary URL not reachable'); }
+        } catch (error) {
+            console.warn('Primary URL failed, opening fallback:', error);
+            window.open(fallbackUrl, 'helpWindow', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+        }
+    }
+
+    const changelogButton = document.getElementById('changelogbtn');
+    changelogButton.addEventListener('click', openChangeLog);
+    async function openChangeLog() {
+      event.preventDefault();
+      const width = 1024;
+      const height = 768;
+      const currentWindow = window;
+      const currentRight = currentWindow.screenX + currentWindow.outerWidth;
+      let left = currentRight;
+      if (left + width > window.screen.availWidth) { left = currentRight - width; }
+      const top = currentWindow.screenY;
+      const primaryUrl = './changelog.html';
+      const fallbackUrl = './beta-star-sterilizer-configurator/changelog.html';
+      try {
+        const response = await fetch(primaryUrl, { method: 'HEAD' });
+        if (response.ok) {
+          window.open(primaryUrl, 'changelogWindow', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+        } else { throw new Error('Primary URL not reachable'); }
+      } catch (error) {
+        console.warn('Primary URL failed, opening fallback:', error);
+        window.open(fallbackUrl, 'changelogWindow', `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+      }
+    }
+</script>
+</body>
+
+</html>

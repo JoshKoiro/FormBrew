@@ -1,0 +1,306 @@
+/* This CSS file modifies the default Bootstrap CSS */
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: 'Libre Franklin', sans-serif !important;
+    font-weight: 600;
+}
+
+/* Drag and Drop styles */
+body.dragover::after {
+    content: 'Drop .checklist file here';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    z-index: 9999;
+}
+
+body.dragover {
+    overflow: hidden;
+}
+
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600 !important;
+}
+
+input.form-check-input {
+    width: 25px;
+    height: 25px;
+}
+
+label.form-check-label {
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.note-button {
+    height: 100% !important;
+}
+
+.btn-dark:hover {
+    background-color: #70757a;
+}
+
+#toastContainer {
+    position: fixed;
+    z-index: 600;
+}
+
+.toast {
+    /* position: fixed; */
+    z-index: 600;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding: 58px 0 0;
+    width: 325px;
+    z-index: 300;
+    background-color: #fff;
+}
+
+.sidebar .active {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+    height: calc(100vh);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+}
+
+#formContainer {
+    margin-top: calc(-100vh);
+}
+
+#themeToggle {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 400;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+#helpPage {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 400;
+    margin-top: 0.5rem;
+    margin-right: 60px;
+}
+
+#helpPage a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#themeToggle:hover, #helpPage:hover {
+    background-color: #e0e0e0;
+}
+
+#themeToggle:focus {
+    box-shadow: none;
+}
+
+.logo {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.help-btn:focus {
+    box-shadow:none;
+}
+
+.help-btn:hover {
+    color: #777;
+}
+
+/* Dark mode styles */
+[data-bs-theme="dark"] body {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+[data-bs-theme="dark"] .card-header {
+    background-color: #2c2c2c;
+    border-bottom-color: #444;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background-color: #2c2c2c;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+[data-bs-theme="dark"] .btn-outline-dark {
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+[data-bs-theme="dark"] .btn-outline-dark:hover {
+    color: #121212;
+    background-color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .sidebar {
+    background-color: #1e1e1e;
+}
+
+[data-bs-theme="dark"] .list-group-item {
+    background-color: #1e1e1e;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .list-group-item:hover {
+    background-color: #2c2c2c;
+}
+
+[data-bs-theme="dark"] #themeToggle, [data-bs-theme="dark"] #helpPage {
+    color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .help-btn {
+    color: #adadad;
+}
+
+[data-bs-theme="dark"] .help-btn:hover {
+    color: #777;
+}
+
+[data-bs-theme="dark"] #themeToggle:hover, [data-bs-theme="dark"] #helpPage:hover {
+    background-color: #2c2c2c;
+}
+
+[data-bs-theme="dark"] .form-check-input {
+    background-color: #2c2c2c;
+    border-color: #444;
+}
+
+[data-bs-theme="dark"] .form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+[data-bs-theme="dark"] .toast {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .toast-header {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+/* Adjust drag and drop styles for dark mode */
+[data-bs-theme="dark"] body.dragover::after {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #121212;
+}
+
+[data-bs-theme="dark"] .popover, [data-bs-theme="dark"] .popover-body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .popover-header {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+/* MOBILE LAYOUT */
+
+@media (max-width: 991.98px) {
+
+    #app {
+        margin-right: 0;
+        --bs-gutter-x: 0;
+    }
+
+    #formContainer {
+        margin-top: 0;
+    }
+
+    .sidebar-sticky {
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: relative;
+        padding-top: 0.5rem;
+    }
+
+    #app-title {
+        text-align: right !important;
+    }
+
+    .logo {
+        display: none;
+    }
+
+}
+
+.options-list {
+    border-left: 2px solid #dee2e6;
+    background-color: rgba(0, 0, 0, 0.02);
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 0.25rem;
+}
+
+[data-bs-theme="dark"] .options-list {
+    border-left-color: #444;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Adjust spacing for the horizontal layout */
+.form-group {
+    min-width: 200px;  /* Ensure minimum width for inputs */
+}
+
+/* Ensure proper alignment of help button */
+.help-btn.col-auto {
+    padding-top: 0.5rem;
+}
+
+/* Make option checkbox proper placement */
+.form-check.ms-4 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
