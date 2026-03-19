@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "yeet": "node node_modules/code-context-yeeter/yeetCode.js",
     "compile": "node compile.js",
-    "compile-offline": "node compile-offline.js",
     "release": "node release.js",
     "changelog": "node generate-changelog.js"
   },

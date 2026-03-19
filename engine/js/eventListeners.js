@@ -6,7 +6,7 @@ function assignEventListeners() {
         window.createGlobalVariables();
         assignButtons();
 
-        // Initialize all registered plugins (runs init hooks and creates buttons)
+        // Initialize all registered plugins
         window.initializePlugins();
 
         window.formatPhoneNumbers();
@@ -14,16 +14,19 @@ function assignEventListeners() {
         window.applyConditions();
 
         // check version
-        window.checkVersion();
+        if (window.checkVersion) {
+            window.checkVersion();
+        }
 
+        // Event listener to check for unsaved changes
         window.addEventListener('beforeunload', (event) => {
-            if(!window.checkSave()) {
+            if (!window.checkSave()) {
                 const message = 'You have unsaved changes. Are you sure you want to leave?';
                 event.returnValue = message;
                 return message;
             }
         });
-    
+
         document.querySelector('form').addEventListener('change', () => {
             window.refreshGlobalVariables();
             window.updateDescriptions();
@@ -41,21 +44,39 @@ function assignButtons() {
     const importButton = document.getElementById('importButton');
     const fileInput = document.getElementById('importFile');
     const themeToggleBtn = document.getElementById('themeToggle');
-    const sendEmailBtn = document.getElementById('sendEmail');
 
-    fileInput.addEventListener('change', window.loadForm);
-    importButton.addEventListener('click', () => {
-        fileInput.setAttribute('accept', '.checklist');
-        fileInput.click();
-    });
-    saveButton.addEventListener('click', window.saveForm);
+    if (fileInput) {
+        fileInput.addEventListener('change', window.loadForm);
+    }
+
+    if (importButton && fileInput) {
+        importButton.addEventListener('click', () => {
+            fileInput.setAttribute('accept', '.checklist');
+            fileInput.click();
+        });
+    }
+
+    if (saveButton) {
+        saveButton.addEventListener('click', window.saveForm);
+    }
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', window.toggleTheme);
+    }
+
+    // Wire up optional product-provided buttons
+    const sendEmailBtn = document.getElementById('sendEmail');
+    if (sendEmailBtn && window.sendEmail) {
+        sendEmailBtn.addEventListener('click', window.sendEmail);
+    }
+
     console.log('Buttons assigned');
-    sendEmailBtn.addEventListener('click', window.sendEmail);
-    themeToggleBtn.addEventListener('click', window.toggleTheme);
 }
 
 window.assignEventListeners = assignEventListeners;
 
+// Apply saved theme immediately (before DOMContentLoaded) so there's no flash.
+// productConfig must be loaded before this script for logo paths to work.
 const savedTheme = localStorage.getItem('theme') || 'light';
 window.setTheme(savedTheme);
 

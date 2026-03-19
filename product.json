@@ -1,0 +1,17 @@
+{
+    "product_name": "Example Product",
+    "product_id": "product-configurator",
+    "version": "1.0.0",
+    "branding": {
+        "title": "PRODUCT CONFIGURATION CHECKLIST",
+        "logo": "./assets/logo.png",
+        "favicon": "./assets/favicon.png"
+    },
+    "version_check": {
+        "enabled": true,
+        "remote_url": "https://raw.githubusercontent.com/JoshKoiro/version-check/main/bsscfg-version.json"
+    },
+    "help_url": "./help/help.html",
+    "changelog_url": "./changelog/changelog.html",
+    "file_extension": ".checklist"
+}
