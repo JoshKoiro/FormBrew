@@ -39,7 +39,7 @@ function execCommand(command) {
 
 // Function to update the version in version.js and version.json
 function updateVersionFile(versionType) {
-  const filePath = path.join(__dirname, 'version.js');
+  const filePath = path.join(__dirname, 'product/version.js');
   let fileContent = readFileSync(filePath, 'utf8');
 
   const majorVersionMatch = fileContent.match(/window\.majorVersion\s*=\s*(\d+);/);
@@ -76,11 +76,11 @@ function updateVersionFile(versionType) {
 
   // Update version-check submodule before writing changes
   if(isGitEnabled) {
-    execCommand('git -C version-check pull origin main');
+    execCommand('git -C version-check-2 pull origin main');
   }
 
   // Update version.json content in the version-check submodule
-  const jsonFilePath = path.join(__dirname, '/version-check/formbrew.json');
+  const jsonFilePath = path.join(__dirname, '/version-check-2/formbrew.json');
   const jsonContent = JSON.stringify({
     latest_version: newVersion
   }, null, 2);
@@ -126,17 +126,17 @@ function askQuestion(query) {
       execCommand('git -c core.verbose=true pull origin dev');
 
       // Step 3: Add and commit the updated version.json in the submodule
-      execCommand('git -C version-check add -v formbrew.json');
-      execCommand(`git -C version-check -c core.verbose=true commit -v -m "Update formbrew.json to v${newVersion}"`);
-      execCommand('git -C version-check -c core.verbose=true push -v origin main');
+      execCommand('git -C version-check-2 add -v formbrew.json');
+      execCommand(`git -C version-check-2 -c core.verbose=true commit -v -m "Update formbrew.json to v${newVersion}"`);
+      execCommand('git -C version-check-2 -c core.verbose=true push -v origin main');
 
       // Step 4: Update the submodule reference in the parent repository
-      execCommand('git add -v version-check');
-      execCommand(`git -c core.verbose=true commit -v -m "Update submodule version-check to latest commit"`);
+      execCommand('git add -v version-check-2');
+      execCommand(`git -c core.verbose=true commit -v -m "Update submodule version-check-2 to latest commit"`);
       execCommand('git -c core.verbose=true push -v origin dev');
 
       // Step 5: Add and commit the updated version.js and version.json
-      execCommand('git add -v version.js');
+      execCommand('git add -v product/version.js');
       execCommand(`git -c core.verbose=true commit -v -m "Update version to v${newVersion}"`);
       execCommand('git -c core.verbose=true push -v origin dev');
 
