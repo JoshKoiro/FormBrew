@@ -1,0 +1,3 @@
+[submodule "version-check-2"]
+	path = version-check-2
+	url = git@github.com:JoshKoiro/version-check.git
