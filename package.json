@@ -1,0 +1,18 @@
+{
+  "name": "formbrew",
+  "version": "1.0.0",
+  "description": "A JS framework to create dynamic forms without a server",
+  "main": "compile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "yeet": "node node_modules/code-context-yeeter/yeetCode.js",
+    "compile": "node compile.js",
+    "release": "node release.js",
+    "changelog": "node generate-changelog.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "code-context-yeeter": "github:JoshKoiro/code-context-yeeter"
+  }
+}
