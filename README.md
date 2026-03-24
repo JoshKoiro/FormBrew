@@ -4,7 +4,7 @@
 
 FormBrew ☕ is an open-source, client-side form engine for building product configurators. It renders dynamic forms from a JSON configuration, supports conditional field logic, save/load to file, PDF export, dark mode, and a plugin system for extending functionality.
 
-FormBrew is designed to be **forked**. The engine handles form rendering, validation, persistence, and the UI framework. You bring the product-specific configuration, descriptions, export logic, and branding. The directory structure enforces a clean boundary between the two, so your product fork can pull engine updates from upstream without merge conflicts touching your product files.
+FormBrew is designed to be **used as a template**. The engine handles form rendering, validation, persistence, and the UI framework. You bring the product-specific configuration, descriptions, export logic, and branding. The directory structure enforces a clean boundary between the two, so your product repo can pull engine updates from upstream without merge conflicts touching your product files.
 
 ## Quick Start
 
@@ -23,13 +23,33 @@ npm run compile
 
 The output lands in `dist/`.
 
-## Creating a Product Line (Forking)
+## Creating a Product Line
 
-Every product configurator starts as a fork of this repo. The fork inherits the engine and replaces the example product files with real ones.
+Every product configurator starts as a copy of this repo. There are two ways to create one, depending on your situation.
 
-### 1. Fork and clone
+### Method A: Use as Template (recommended)
 
-Fork this repository on GitHub, then clone your fork:
+This is the best approach when you own the FormBrew repo or want a clean start without inheriting git history. FormBrew is configured as a GitHub template repository.
+
+1. On the FormBrew repo page, click the green **"Use this template"** button → **"Create a new repository"**
+2. Name it (e.g., `sterilizer-configurator`) and create it
+3. Clone your new repo and add the upstream remote:
+
+```bash
+git clone git@github.com:YourOrg/sterilizer-configurator.git
+cd sterilizer-configurator
+git remote add upstream git@github.com:YourOrg/formbrew.git
+git fetch upstream
+```
+
+The new repo will show "generated from formbrew" on GitHub, linking back to the base project. The `upstream` remote lets you pull engine updates later.
+
+### Method B: Fork on GitHub
+
+If you're an external contributor or prefer to keep the full git history, use a standard GitHub fork:
+
+1. Click **Fork** on the FormBrew repo page
+2. Clone your fork and add the upstream remote:
 
 ```bash
 git clone git@github.com:YourOrg/my-product-configurator.git
@@ -37,9 +57,9 @@ cd my-product-configurator
 git remote add upstream git@github.com:YourOrg/formbrew.git
 ```
 
-The `upstream` remote lets you pull engine updates later.
+Both methods produce the same result — a repo with the engine files and example product files, linked to upstream for future updates. All remaining steps are identical regardless of which method you used.
 
-### 2. Replace the example product files
+### Replace the example product files
 
 The directories you'll modify are `config/`, `plugins/`, `product/`, and `assets/`. Each is explained in the Project Structure section below. At a minimum, you need to:
 
@@ -52,7 +72,7 @@ The directories you'll modify are `config/`, `plugins/`, `product/`, and `assets
 - Add product-specific plugins to `plugins/` (descriptions, export formats, etc.)
 - Update `index.html` to include `<script>` tags for your plugins
 
-### 3. Set up merge protection
+### Set up merge protection
 
 Create a `.gitattributes` file so that pulling upstream engine updates doesn't overwrite your product files:
 
@@ -76,11 +96,11 @@ git config merge.ours.driver true
 
 With this in place, `git merge upstream/main` will only bring in changes to `engine/` files. Your product-specific files are protected.
 
-### 4. Set up version tracking (optional)
+### Set up version tracking (optional)
 
 If you want end users to see "new version available" notifications, set up a version-check repository. See the Version Check Setup section below for full instructions.
 
-### 5. Build and test
+### Build and test
 
 Open `index.html` in a browser and verify everything works. Then compile:
 
@@ -92,7 +112,7 @@ npm run compile
 
 ```
 formbrew/
-├── engine/                  ← Shared engine (do not modify in forks)
+├── engine/                  ← Shared engine (do not modify in product repos)
 │   ├── js/                  ← Core JavaScript modules
 │   ├── css/                 ← Base stylesheet
 │   └── plugins/             ← Engine-level plugin infrastructure
@@ -125,7 +145,7 @@ formbrew/
 
 ### What goes where
 
-**`engine/`** — The shared form engine. Contains everything needed to render a form from a JSON config, handle save/load, PDF export, conditional field logic, validation, theme toggling, notifications, drag-and-drop import, and the plugin loader. You should never need to edit these files in a product fork. If you find a bug here, fix it upstream and pull the fix into your fork.
+**`engine/`** — The shared form engine. Contains everything needed to render a form from a JSON config, handle save/load, PDF export, conditional field logic, validation, theme toggling, notifications, drag-and-drop import, and the plugin loader. You should never need to edit these files in a product repo. If you find a bug here, fix it upstream and pull the fix into your product repo.
 
 **`config/formConfig.js`** — The form definition for your product. This is a `window.formConfig` object that declares every form section, field, field type, options, required flags, and conditional rules. The engine reads this at startup and renders the entire form from it. See the Form Configuration section below for the schema.
 
@@ -137,13 +157,13 @@ formbrew/
 
 **`product/checkVersion.js`** — Checks a remote endpoint for the latest version and shows a notification if an update is available. The example is a stub; replace the URL with your own version-check endpoint after setting up the version-check repository.
 
-**`product/init.js`** — Runs last, after all engine and product scripts have loaded. Applies branding to the DOM (sets the title, logo, page title), wires up the help and changelog window openers, and calls `setTheme` to ensure the correct logo variant is displayed. Each product fork writes its own version of this file.
+**`product/init.js`** — Runs last, after all engine and product scripts have loaded. Applies branding to the DOM (sets the title, logo, page title), wires up the help and changelog window openers, and calls `setTheme` to ensure the correct logo variant is displayed. Each product repo writes its own version of this file.
 
 **`assets/`** — Static files for your product: logos (light and dark variants), favicon, and any other images. The engine's theme toggle reads logo paths from `product/config.js`, not from the HTML, so you can name these files whatever you want as long as the config matches.
 
-**`version-check/`** — A git submodule pointing to your version-check repository. This is optional — only needed if you want the app to notify users when a new version is available if they have copied the file in the /dist folder to another location. See the Version Check Setup section below.
+**`version-check/`** — A git submodule pointing to your version-check repository. This is optional — only needed if you want the app to notify users when a new version is available. See the Version Check Setup section below.
 
-**`index.html`** — The entry point. Defines the page skeleton (sidebar, form container, toast container, theme toggle button), then loads scripts in order: product config first, engine scripts, product scripts, and `product/init.js` last. Each product fork owns this file and controls which plugin scripts are included.
+**`index.html`** — The entry point. Defines the page skeleton (sidebar, form container, toast container, theme toggle button), then loads scripts in order: product config first, engine scripts, product scripts, and `product/init.js` last. Each product repo owns this file and controls which plugin scripts are included.
 
 **`release.js`** — Automates the release process: bumps the version in `product/version.js`, updates the version-check submodule, commits, tags, and pushes. See the Releases section below.
 
@@ -195,7 +215,7 @@ window.formConfig = {
 
 ### Variable naming
 
-The engine converts field labels to variable names by lowercasing and replacing spaces with underscores. "Product Color" becomes `product_color`. These variable names are used as form element `name` and `id` attributes, as keys in `window.selections`, and as the basis for notes fields (`product_color_notes`).
+The engine converts field labels to variable names by lowercasing and replacing spaces with underscores. "Chamber Size" becomes `chamber_size`. These variable names are used as form element `name` and `id` attributes, as keys in `window.selections`, and as the basis for notes fields (`chamber_size_notes`).
 
 ### Field types
 
@@ -211,7 +231,7 @@ The engine converts field labels to variable names by lowercasing and replacing 
 
 When `optional` is `true` on a field, the engine renders an "Option" checkbox next to the field. This is a UI hint used by export plugins to separate base selections from optional add-ons. The engine itself doesn't treat optional fields differently — it's up to your plugins to check `window.selections['field_name_option']` and handle the distinction.
 
-For dropdown fields marked as optional, checking the "Option" checkbox also reveals a list of all dropdown values as individual checkboxes. This lets users mark specific dropdown options as alternatives to configure separately.
+For dropdown fields marked as optional, checking the "Option" checkbox also reveals a list of all dropdown values as individual checkboxes. This lets users mark specific dropdown options as alternatives to quote separately.
 
 ### Conditions
 
@@ -336,9 +356,9 @@ Plugins may also expose their own globals for other plugins to consume. For exam
 
 ## Versioning
 
-Each product fork maintains its own version number in `product/version.js`. This is the version displayed to end users in the sidebar and is updated automatically by the release script.
+Each product repo maintains its own version number in `product/version.js`. This is the version displayed to end users in the sidebar and is updated automatically by the release script.
 
-The upstream `formbrew` repo uses git tags (`v0.1.0`, `v0.2.0`, etc.) to mark engine releases. When you merge upstream into your fork, you can check which engine tag you've incorporated by running:
+The upstream `formbrew` repo uses git tags (`v0.1.0`, `v0.2.0`, etc.) to mark engine releases. When you merge upstream into your product repo, you can check which engine tag you've incorporated by running:
 
 ```bash
 git log --oneline upstream/main --tags
@@ -360,7 +380,7 @@ This is entirely optional. If you don't need update notifications, skip this sec
 
 ```
 ┌─────────────────────┐       fetch on load        ┌──────────────────────┐
-│   Product Fork      │ ──────────────────────────► │  version-check repo  │
+│   Product Repo      │ ──────────────────────────► │  version-check repo  │
 │                     │                             │                      │
 │  product/version.js │  compare versions           │  myapp-version.json  │
 │  v1.2.3             │ ◄───────────────────────    │  { "latest": "1.3.0"}│
@@ -370,7 +390,7 @@ This is entirely optional. If you don't need update notifications, skip this sec
 └─────────────────────┘                             └──────────────────────┘
 ```
 
-The version-check repository is a standalone git repo that holds one JSON file per product. Each product fork includes this repo as a git submodule so the release script can update the JSON file automatically during a release.
+The version-check repository is a standalone git repo that holds one JSON file per product. Each product repo includes this repo as a git submodule so the release script can update the JSON file automatically during a release.
 
 ### Step 1: Create the version-check repository
 
@@ -405,9 +425,9 @@ git remote add origin <your-version-check-repo-url>
 git push -u origin main
 ```
 
-### Step 2: Add the submodule to your product fork
+### Step 2: Add the submodule to your product repo
 
-Navigate to your product fork and add the version-check repo as a submodule:
+Navigate to your product repo and add the version-check repo as a submodule:
 
 ```bash
 cd my-product-configurator
@@ -506,7 +526,7 @@ https://raw.githubusercontent.com/<org>/<repo>/main/<project-name>-version.json
 
 ### Multiple products sharing one version-check repo
 
-If you maintain several product forks, they can all share a single version-check repository. Each product gets its own JSON file:
+If you maintain several product repos, they can all share a single version-check repository. Each product gets its own JSON file:
 
 ```
 version-check/
@@ -515,7 +535,7 @@ version-check/
 └── dryer-version.json           ← { "latest_version": "0.3.1" }
 ```
 
-Each product fork adds the same version-check repo as a submodule, but configures its `release.js` with a different `projectName` so it updates the correct JSON file. Each product's `checkVersion.js` fetches its own file by URL.
+Each product repo adds the same version-check repo as a submodule, but configures its `release.js` with a different `projectName` so it updates the correct JSON file. Each product's `checkVersion.js` fetches its own file by URL.
 
 ## Releases
 
@@ -550,7 +570,7 @@ npm run compile
 
 ## Pulling Upstream Updates
 
-When the engine gets bug fixes or new features in the upstream `formbrew` repo, pull them into your product fork:
+When the engine gets bug fixes or new features in the upstream `formbrew` repo, pull them into your product repo:
 
 ```bash
 # Fetch the latest from upstream
@@ -560,11 +580,11 @@ git fetch upstream
 git merge upstream/main
 ```
 
-If you set up `.gitattributes` as described in the forking instructions, this merge will only apply changes to `engine/` files. Your product-specific files in `config/`, `plugins/`, `product/`, and `assets/` are protected by the `merge=ours` strategy.
+If you set up `.gitattributes` as described in the setup instructions, this merge will only apply changes to `engine/` files. Your product-specific files in `config/`, `plugins/`, `product/`, and `assets/` are protected by the `merge=ours` strategy.
 
 ### If you find an engine bug while working on your product
 
-The preferred workflow is to fix it upstream first, then pull the fix into your fork:
+The preferred workflow is to fix it upstream first, then pull the fix into your product repo:
 
 ```bash
 # 1. Switch to the upstream repo and create a fix branch
@@ -575,21 +595,21 @@ git commit -am "Fix: description of the bug"
 git push origin fix/describe-the-bug
 # Open a PR, review, merge to main
 
-# 2. Pull the fix into your product fork
+# 2. Pull the fix into your product repo
 cd ../my-product-configurator
 git fetch upstream
 git merge upstream/main
 git push origin main
 ```
 
-If you need the fix immediately and can't wait for the upstream PR, fix it directly in your fork's `engine/` directory, then contribute it back to upstream by opening a PR from your fork to the upstream repo. Other product forks can then pull the same fix.
+If you need the fix immediately and can't wait for the upstream PR, fix it directly in your product repo's `engine/` directory, then contribute it back to upstream by opening a PR from your repo to the upstream repo. Other product repos can then pull the same fix.
 
 ### Resolving merge conflicts
 
 Conflicts are rare when the directory boundary is respected. They can occur if:
 
-- You modified an engine file directly in your fork (avoid this — fix upstream instead)
-- Upstream changed `index.html` in a way that conflicts with your fork's version (resolve manually, keeping your product-specific parts and incorporating the engine's structural changes)
+- You modified an engine file directly in your product repo (avoid this — fix upstream instead)
+- Upstream changed `index.html` in a way that conflicts with your product repo's version (resolve manually, keeping your product-specific parts and incorporating the engine's structural changes)
 
 If a conflict does happen, resolve it, test thoroughly, and commit the merge.
 
@@ -640,4 +660,4 @@ On every form change, the engine runs this sequence:
 4. `applyConditions()` — re-evaluates conditional rules
 5. Steps 1–2 repeat (ensures consistency after condition changes)
 
-Note: product forks typically wire a descriptions plugin into this loop via `eventListeners.js`. The engine's change handler calls `window.updateDescriptions()` if it exists, but it's a no-op in the base engine — only product plugins define that function.
+Note: product repos typically wire a descriptions plugin into this loop via `eventListeners.js`. The engine's change handler calls `window.updateDescriptions()` if it exists, but it's a no-op in the base engine — only product plugins define that function.
