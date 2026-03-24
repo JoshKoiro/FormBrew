@@ -1,3 +1,5 @@
+<img src="./assets/logo.png">
+
 # FormBrew
 
 FormBrew ☕ is an open-source, client-side form engine for building product configurators. It renders dynamic forms from a JSON configuration, supports conditional field logic, save/load to file, PDF export, dark mode, and a plugin system for extending functionality.
