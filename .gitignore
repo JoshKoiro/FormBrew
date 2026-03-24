@@ -9,3 +9,5 @@ config/exportWorkOrderNotes.js
 config/formConfig.js
 /plugins/*/*
 /plugins/*
+help/*
+/help
