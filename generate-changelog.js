@@ -224,8 +224,8 @@ h1 {
 
 // Main function to generate or update changelog
 function updateChangelog() {
-    const changelogPath = path.join(process.cwd(), 'changelog.html');
-    const cssPath = path.join(process.cwd(), 'changelog.css');
+    const changelogPath = path.join(process.cwd(), '/changelog/changelog.html');
+    const cssPath = path.join(process.cwd(), '/changelog/changelog.css');
     
     try {
         // Write HTML file
