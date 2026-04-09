@@ -1,4 +1,4 @@
 window.majorVersion = 0;
 window.minorVersion = 0;
-window.patchVersion = 6;
+window.patchVersion = 7;
 window.version = `${majorVersion}.${minorVersion}.${patchVersion}`
