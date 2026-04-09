@@ -126,3 +126,8 @@ window.refreshGlobalVariables = refreshGlobalVariables;
 window.getVariableName = getVariableName;
 window.showNotes = showNotes;
 window.getDisplayName = getDisplayName;
+
+// Default no-op — overridden by descriptions plugin if installed
+if (!window.updateDescriptions) {
+    window.updateDescriptions = function () {};
+}
